@@ -74,11 +74,6 @@ extension LoadingView {
                 Rectangle().fill(Color(secondaryColor))
                     .frame(width: 120, height: 1)
             }
-            Image("firebase-icon", bundle: .module)
-                .resizable()
-                .frame(width: 40, height: 40)
-                .padding(15)
-                .background(Circle().fill(Color(secondaryColor)))
         }
     }
 }
