@@ -123,16 +123,7 @@ struct SignInWithEmailView: View {
                     .focused($focus, equals: .password)
                     .submitLabel(.go)
                     .onSubmit {
-                        FBAuth.authenticate(withEmail: self.user.email,
-                                            password: self.user.password) { (result) in
-                                                switch result {
-                                                case .failure(let error):
-                                                    self.authError = error
-                                                    self.showAlert = true
-                                                case .success:
-                                                    print("Signed in")
-                                                }
-                        }
+                        signInUser()
                     }
             }
             .padding(.vertical, 6)
@@ -140,16 +131,7 @@ struct SignInWithEmailView: View {
             .padding(.bottom, 4)
             
             Button {
-                FBAuth.authenticate(withEmail: self.user.email,
-                                    password: self.user.password) { (result) in
-                                        switch result {
-                                        case .failure(let error):
-                                            self.authError = error
-                                            self.showAlert = true
-                                        case .success:
-                                            print("Signed in")
-                                        }
-                }
+                signInUser()
             } label: {
                 Text("Login")
                     .padding(.vertical, 8)
@@ -159,11 +141,20 @@ struct SignInWithEmailView: View {
             .buttonStyle(.borderedProminent)
             .background(Color(primaryColor))
             
+            HStack {
+                Button {
+                    action = .resetPW
+                    showSheet = true
+                } label: {
+                    Text("Forgot Password?")
+                        .foregroundColor(Color(secondaryColor))
+                }
+            }
+            .padding(.vertical, 10)
             
             HStack {
                 Text("Don't have an account yet?")
                 Button {
-                    // show singup view.
                     action = .signUp
                     showSheet = true
                 } label: {
@@ -174,8 +165,35 @@ struct SignInWithEmailView: View {
             }
             .padding([.top, .bottom], 50)
         }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Login Error"),
+                  message: Text(self.authError?.localizedDescription ?? "Unknown error"),
+                  dismissButton: .default(Text("OK")) {
+                if self.authError == .incorrectPassword {
+                    self.user.password = ""
+                } else {
+                    self.user.password = ""
+                    self.user.email = ""
+                }
+                })
+        }
         .listStyle(.plain)
         .padding()
+    }
+}
+
+extension SignInWithEmailView {
+    func signInUser() {
+        FBAuth.authenticate(withEmail: self.user.email,
+                            password: self.user.password) { (result) in
+                                switch result {
+                                case .failure(let error):
+                                    self.authError = error
+                                    self.showAlert = true
+                                case .success:
+                                    print("Signed in")
+                                }
+        }
     }
 }
 

@@ -166,6 +166,7 @@ struct SignUpView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .buttonStyle(.borderedProminent)
+                .background(Color(primaryColor))
                 
             }
             .toolbar {
