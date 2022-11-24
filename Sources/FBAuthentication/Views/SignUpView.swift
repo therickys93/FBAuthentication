@@ -8,6 +8,13 @@
 
 import SwiftUI
 
+private enum FocusableField: Hashable {
+    case name
+    case email
+    case password
+    case confirmPassword
+}
+
 struct SignUpView: View {
     @EnvironmentObject var userInfo: UserInfo
     @State var user: UserViewModel = UserViewModel()
@@ -16,75 +23,162 @@ struct SignUpView: View {
     @State private var errorString = ""
     var primaryColor: UIColor
     var secondaryColor: UIColor
+    @FocusState private var focus: FocusableField?
     var body: some View {
         NavigationView {
+//            VStack {
+//                    VStack(alignment: .leading) {
+//                        TextInputView("Full Name", text: $user.fullname)
+//                        Rectangle().fill(Color(.secondaryLabel))
+//                            .frame(height: 1)
+//                    }
+//                    VStack(alignment: .leading) {
+//                        TextInputView("Email Address", text: $user.email)
+//                        if !user.validEmailAddressText.isEmpty || user.email.isEmpty {
+//                            Text(user.validEmailAddressText).font(.caption).foregroundColor(.red)
+//                        }
+//                        Rectangle().fill(Color(.secondaryLabel))
+//                            .frame(height: 1)
+//                    }
+//                    VStack(alignment: .leading) {
+//                        TextInputView("Password", text: $user.password, isSecure: true)
+//                        if !user.validPasswordText.isEmpty {
+//                            Text(user.validPasswordText).font(.caption).foregroundColor(.red)
+//                        }
+//                        Rectangle().fill(Color(.secondaryLabel))
+//                            .frame(height: 1)
+//                    }
+//                    VStack(alignment: .leading) {
+//                        TextInputView("Confirm Password", text: $user.confirmPassword, isSecure: true)
+//                        if !user.passwordsMatch( user.confirmPassword) {
+//                            Text(user.validConfirmPasswordText).font(.caption).foregroundColor(.red)
+//                        }
+//                        Rectangle().fill(Color(.secondaryLabel))
+//                            .frame(height: 1)
+//                    }
+//                VStack(spacing: 20 ) {
+//                    Button {
+//                        FBAuth.createUser(withEmail: self.user.email,
+//                                          name: self.user.fullname,
+//                                          password: self.user.password) { (restult) in
+//                            switch restult {
+//                            case .failure(let error):
+//                                self.errorString = error.localizedDescription
+//                                self.showError = true
+//                            case .success:
+//                                print("Account creation successful")
+//                            }
+//                        }
+//                    } label: {
+//                        Text("Register")
+//                            .frame(width: 200)
+//                            .padding(.vertical, 15)
+//                            .background(Color(primaryColor))
+//                            .cornerRadius(8)
+//                            .foregroundColor(.white)
+//                            .opacity(user.isSignInComplete ? 1 : 0.75)
+//                    }
+//                    .disabled(!user.isSignInComplete)
+//                    Spacer()
+//                }.padding()
+//            }
+//            .frame(width: 300)
+//            .padding(.top)
+//                .alert(isPresented: $showError) {
+//                    Alert(title: Text("Error creating accout"),
+//                          message: Text(self.errorString),
+//                          dismissButton: .default(Text("OK")))
+//                }
+//                .navigationBarTitle("Sign Up", displayMode: .inline)
+//                .navigationBarItems(trailing: Button("Dismiss") {
+//                    self.presentationMode.wrappedValue.dismiss()
+//                })
             VStack {
-                    VStack(alignment: .leading) {
-                        TextInputView("Full Name", text: $user.fullname)
-                        Rectangle().fill(Color(.secondaryLabel))
-                            .frame(height: 1)
-                    }
-                    VStack(alignment: .leading) {
-                        TextInputView("Email Address", text: $user.email)
-                        if !user.validEmailAddressText.isEmpty || user.email.isEmpty {
-                            Text(user.validEmailAddressText).font(.caption).foregroundColor(.red)
+                Image("SignUp", bundle: .module)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(minWidth: 300, maxHeight: 400)
+                Text("Sign up")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                HStack {
+                    Image(systemName: "person")
+                    TextField("Name", text: $user.fullname)
+                        .focused($focus, equals: .name)
+                        .submitLabel(.next)
+                        .onSubmit {
+                            self.focus = .email
                         }
-                        Rectangle().fill(Color(.secondaryLabel))
-                            .frame(height: 1)
-                    }
-                    VStack(alignment: .leading) {
-                        TextInputView("Password", text: $user.password, isSecure: true)
-                        if !user.validPasswordText.isEmpty {
-                            Text(user.validPasswordText).font(.caption).foregroundColor(.red)
-                        }
-                        Rectangle().fill(Color(.secondaryLabel))
-                            .frame(height: 1)
-                    }
-                    VStack(alignment: .leading) {
-                        TextInputView("Confirm Password", text: $user.confirmPassword, isSecure: true)
-                        if !user.passwordsMatch( user.confirmPassword) {
-                            Text(user.validConfirmPasswordText).font(.caption).foregroundColor(.red)
-                        }
-                        Rectangle().fill(Color(.secondaryLabel))
-                            .frame(height: 1)
-                    }
-                VStack(spacing: 20 ) {
-                    Button {
-                        FBAuth.createUser(withEmail: self.user.email,
-                                          name: self.user.fullname,
-                                          password: self.user.password) { (restult) in
-                            switch restult {
-                            case .failure(let error):
-                                self.errorString = error.localizedDescription
-                                self.showError = true
-                            case .success:
-                                print("Account creation successful")
-                            }
-                        }
-                    } label: {
-                        Text("Register")
-                            .frame(width: 200)
-                            .padding(.vertical, 15)
-                            .background(Color(primaryColor))
-                            .cornerRadius(8)
-                            .foregroundColor(.white)
-                            .opacity(user.isSignInComplete ? 1 : 0.75)
-                    }
-                    .disabled(!user.isSignInComplete)
-                    Spacer()
-                }.padding()
-            }
-            .frame(width: 300)
-            .padding(.top)
-                .alert(isPresented: $showError) {
-                    Alert(title: Text("Error creating accout"),
-                          message: Text(self.errorString),
-                          dismissButton: .default(Text("OK")))
                 }
-                .navigationBarTitle("Sign Up", displayMode: .inline)
-                .navigationBarItems(trailing: Button("Dismiss") {
-                    self.presentationMode.wrappedValue.dismiss()
-                })
+                .padding(.vertical, 6)
+                .background(Divider(), alignment: .bottom)
+                .padding(.vertical, 6)
+                
+                HStack {
+                    Image(systemName: "at")
+                    TextField("Email", text: $user.email)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled(true)
+                        .focused($focus, equals: .email)
+                        .submitLabel(.next)
+                        .onSubmit {
+                            self.focus = .password
+                        }
+                }
+                .padding(.vertical, 6)
+                .background(Divider(), alignment: .bottom)
+                .padding(.vertical, 6)
+                
+                HStack {
+                    Image(systemName: "lock")
+                    SecureField("Password", text: $user.password)
+                        .focused($focus, equals: .password)
+                        .submitLabel(.next)
+                        .onSubmit {
+                            self.focus = .confirmPassword
+                        }
+                }
+                .padding(.vertical, 6)
+                .background(Divider(), alignment: .bottom)
+                .padding(.vertical, 6)
+                
+                HStack {
+                    Image(systemName: "lock")
+                    SecureField("Confirm Password", text: $user.confirmPassword)
+                        .focused($focus, equals: .confirmPassword)
+                        .submitLabel(.go)
+                        .onSubmit {
+                            // signup
+                        }
+                }
+                .padding(.vertical, 6)
+                .background(Divider(), alignment: .bottom)
+                .padding(.vertical, 6)
+                
+                Button {
+                    // call sign in method here also.
+                } label: {
+                    Text("Sign Up")
+                        .padding(.vertical, 8)
+                        .frame(maxWidth: .infinity)
+                }
+                .frame(maxWidth: .infinity)
+                .buttonStyle(.borderedProminent)
+                
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        self.presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Text("Dismiss")
+                    }
+                }
+            }
+            .listStyle(.plain)
+            .padding()
         }
     }
 }

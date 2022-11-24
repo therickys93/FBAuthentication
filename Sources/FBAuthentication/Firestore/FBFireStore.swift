@@ -28,7 +28,7 @@ public enum FBFirestore {
 //                        completion(.failure(FireStoreError.noUser))
 //                        return
 //                    }
-                    completion(.success(user))
+                    completion(.success(user!))
                 } catch {
                     completion(.failure(FireStoreError.noUser))
                 }
