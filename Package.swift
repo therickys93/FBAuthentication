@@ -30,6 +30,7 @@ let package = Package(
             //     .product(name: "FirebaseFirestore", package: "Firebase"),
             //     .product(name: "FirebaseFirestoreSwift", package: "Firebase")
             // ],
+            dependencies: ["Firebase"],
             resources: [.process("Image.xcassets")]),
         .testTarget(
             name: "FBAuthenticationTests",
