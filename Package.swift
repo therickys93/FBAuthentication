@@ -25,12 +25,14 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "FBAuthentication",
-            // dependencies: [
-            //     .product(name: "FirebaseAuth", package: "Firebase"),
-            //     .product(name: "FirebaseFirestore", package: "Firebase"),
-            //     .product(name: "FirebaseFirestoreSwift", package: "Firebase")
-            // ],
-            dependencies: ["firebase-ios-sdk"],
+            dependencies: [
+                .product(name: "FirebaseAuth", package: "Firebase"),
+                .product(name: "FirebaseFirestore", package: "Firebase"),
+                .product(name: "FirebaseFirestoreSwift", package: "Firebase"),
+                .product(name: "FirebaseStorage", package: "Firebase"),
+                .product(name: "FirebaseAnalytics", package: "Firebase"),
+                .product(name: "FirebaseAnalyticsSwift", package: "Firebase")
+            ],
             resources: [.process("Image.xcassets")]),
         .testTarget(
             name: "FBAuthenticationTests",
