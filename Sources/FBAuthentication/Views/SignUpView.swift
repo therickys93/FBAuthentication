@@ -181,6 +181,8 @@ struct TextInputView: View {
                 .scaleEffect(text.tfProperties.scale, anchor: .leading)
             if isSecure {
                 SecureField("", text: $text)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled(true)
             } else {
                 TextField("", text: $text)
                     .textInputAutocapitalization(.never)
