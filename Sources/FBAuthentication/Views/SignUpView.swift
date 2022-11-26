@@ -56,6 +56,7 @@ struct SignUpView: View {
                     Image(systemName: "at")
                     VStack(alignment: .leading) {
                         TextInputView("Email Address", text: $user.email)
+                            .keyboardType(.emailAddress)
                             .focused($focus, equals: .email)
                             .submitLabel(.next)
                             .onSubmit {
@@ -183,6 +184,7 @@ struct TextInputView: View {
                 SecureField("", text: $text)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled(true)
+                    .textContentType(.none)
             } else {
                 TextField("", text: $text)
                     .textInputAutocapitalization(.never)
