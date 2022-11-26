@@ -19,11 +19,50 @@ struct SignInWithEmailView: View {
     var secondaryColor: UIColor
     var body: some View {
         VStack {
-            TextField("Email Address", text: self.$user.email)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled(true)
-                .keyboardType(.emailAddress)
-            SecureField("Password", text: $user.password)
+            Image("Login", bundle: .module)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(minWidth: 300, minHeight: 400)
+            
+            Text("Login")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            HStack {
+                Image(systemName: "at")
+                TextField("Email Address", text: self.$user.email)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled(true)
+                    .keyboardType(.emailAddress)
+            }
+            .padding(.vertical, 6)
+            .background(Divider(), alignment: .bottom)
+            .padding(.bottom, 4)
+            
+            HStack {
+                Image(systemName: "lock")
+                SecureField("Password", text: $user.password)
+            }
+            .padding(.vertical, 6)
+            .background(Divider(), alignment: .bottom)
+            .padding(.bottom, 4)
+                        
+            Button {
+                signInUser()
+            } label: {
+                Text("Login")
+                    .padding(.vertical, 8)
+                    .frame(maxWidth: .infinity)
+                    .foregroundColor(.white)
+                    .opacity(user.isLogInComplete ? 1 : 0.75)
+            }
+            .disabled(!user.isLogInComplete)
+            .background(Color(primaryColor))
+            .frame(maxWidth: .infinity)
+            .cornerRadius(8)
+            .buttonStyle(.borderedProminent)
+            
             HStack {
                 Spacer()
                 Button {
@@ -32,58 +71,52 @@ struct SignInWithEmailView: View {
                 } label: {
                     Text("Forgot Password")
                 }
-                .foregroundColor(Color(primaryColor))
+                .foregroundColor(Color(secondaryColor))
             }
-            .padding(.bottom)
-            VStack(spacing: 10) {
-                Button {
-                    FBAuth.authenticate(withEmail: self.user.email,
-                                        password: self.user.password) { (result) in
-                                            switch result {
-                                            case .failure(let error):
-                                                self.authError = error
-                                                self.showAlert = true
-                                            case .success:
-                                                print("Signed in")
-                                            }
-                    }
-                } label: {
-                    Text("Login")
-                        .padding(.vertical, 15)
-                        .frame(width: 200)
-                        .background(Color(primaryColor))
-                        .cornerRadius(8)
-                        .foregroundColor(.white)
-                        .opacity(user.isLogInComplete ? 1 : 0.75)
-                }.disabled(!user.isLogInComplete)
+            .padding(.vertical, 10)
+            
+            HStack {
+                Text("Don't have an account yet?")
                 Button {
                     action = .signUp
-                   showSheet = true
+                    showSheet = true
                 } label: {
                     Text("Sign Up")
-                        .padding(.vertical, 15)
-                        .frame(width: 200)
-                        .background(Color(secondaryColor))
-                        .cornerRadius(8)
-                        .foregroundColor(.white)
+                        .fontWeight(.semibold)
+                        .foregroundColor(Color(secondaryColor))
                 }
             }
-            .alert(isPresented: $showAlert) {
-                Alert(title: Text("Login Error"),
-                      message: Text(self.authError?.localizedDescription ?? "Unknown error"),
-                      dismissButton: .default(Text("OK")) {
-                    if self.authError == .incorrectPassword {
-                        self.user.password = ""
-                    } else {
-                        self.user.password = ""
-                        self.user.email = ""
-                    }
-                    })
+            .padding()
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Login Error"),
+                  message: Text(self.authError?.localizedDescription ?? "Unknown error"),
+                  dismissButton: .default(Text("OK")) {
+                if self.authError == .incorrectPassword {
+                    self.user.password = ""
+                } else {
+                    self.user.password = ""
+                    self.user.email = ""
+                }
+            })
+        }
+        .listStyle(.plain)
+        .padding()
+        .textFieldStyle(RoundedBorderTextFieldStyle())
+    }
+}
+
+extension SignInWithEmailView {
+    func signInUser() {
+        FBAuth.authenticate(withEmail: self.user.email, password: self.user.password) { (result) in
+            switch result {
+            case .failure(let error):
+                self.authError = error
+                self.showAlert = true
+            case .success:
+                print("Signed in")
             }
         }
-        .padding(.top)
-        .frame(width: 300)
-        .textFieldStyle(RoundedBorderTextFieldStyle())
     }
 }
 
@@ -91,7 +124,7 @@ struct SignInWithEmailView_Previews: PreviewProvider {
     static var previews: some View {
         SignInWithEmailView(showSheet: .constant(false),
                             action: .constant(.signUp),
-                            primaryColor: .systemGreen,
-                            secondaryColor: .systemBlue)
+                            primaryColor: .systemBlue,
+                            secondaryColor: .systemOrange)
     }
 }
