@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 private enum FocusableField: Hashable {
     case name
@@ -18,6 +19,8 @@ public struct ProfileView: View {
     @State private var providers: [FBAuth.ProviderType] = []
     @State private var canDelete = false
     @State private var fullname = ""
+    @State private var password = ""
+    @State private var confirmPassword = ""
     @FocusState private var focus: FocusableField?
     var primaryColor: UIColor
     public init(primaryColor: UIColor = .systemBlue) {
@@ -31,7 +34,7 @@ public struct ProfileView: View {
                         VStack {
                             VStack {
                                 HStack {
-                                    Image(systemName: "at")
+                                    Image(systemName: "person")
                                     TextInputView("Full Name", text: $fullname)
                                         .focused($focus, equals: .name)
                                         .submitLabel(.go)
@@ -61,6 +64,42 @@ public struct ProfileView: View {
                         .padding()
                     }
                     Spacer()
+                    VStack {
+                        VStack {
+                            HStack {
+                                Image(systemName: "lock")
+                                TextInputView("New Password", text: $password, isSecure: true)
+                            }
+                            Rectangle().fill(Color(.secondaryLabel))
+                                .frame(height: 1)
+                        }
+                        .padding(.vertical, 6)
+                        
+                        VStack {
+                            HStack {
+                                Image(systemName: "lock")
+                                TextInputView("Confirm New Password", text: $confirmPassword, isSecure: true)
+                            }
+                            Rectangle().fill(Color(.secondaryLabel))
+                                .frame(height: 1)
+                        }
+                        .padding(.vertical, 6)
+                        
+                        Button {
+                            // update password
+                        } label: {
+                            Text("Update")
+                                .padding(.vertical, 8)
+                                .cornerRadius(8)
+                                .frame(maxWidth: .infinity)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .cornerRadius(8)
+                        .buttonStyle(.borderedProminent)
+                        .background(Color(primaryColor))
+                    }
+                    .padding()
+                    Spacer()
                     Text(canDelete ?
                         "DO YOU REALLY WANT TO DELETE?" :
                         "Deleting your account will delete all content " +
@@ -69,7 +108,7 @@ public struct ProfileView: View {
                     HStack {
                         Button("Cancel") {
                             canDelete = false
-                            presentationMode.wrappedValue.dismiss()
+                            self.presentationMode.wrappedValue.dismiss()
                         }
                         .padding(.vertical, 15)
                         .frame(width: 100)
@@ -97,7 +136,7 @@ public struct ProfileView: View {
                 }
                 .padding()
                 .navigationTitle("Profile")
-                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.automatic)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {

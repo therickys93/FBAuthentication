@@ -258,6 +258,32 @@ public struct FBAuth {
             }
         }
     }
+    /// Function called to change user password
+    /// - Parameters:
+    ///     - password: new password
+    ///     - completion: competion handler dealing with response
+    static func changeUser(password: String, completion: @escaping (Result<Bool, Error>) -> Void) {
+        if let user = Auth.auth().currentUser {
+            user.updatePassword(to: password) { error in
+                if let error = error {
+                    completion(.failure(error))
+                } else {
+                    completion(.success(true))
+                }
+            }
+        }
+    }
+    static func changeUser(email: String, completion: @escaping (Result<Bool, Error>) -> Void) {
+        if let user = Auth.auth().currentUser {
+            user.updateEmail(to: email) { error in
+                if let error = error {
+                    completion(.failure(error))
+                } else {
+                    completion(.success(true))
+                }
+            }
+        }
+    }
     /// Function called to delete the entry in the Firestore authentication and the user
     /// collection corresponding to the user
     /// - Parameter completion: completion handler dealing with response
