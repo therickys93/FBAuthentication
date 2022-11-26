@@ -8,6 +8,13 @@
 
 import SwiftUI
 
+private enum FocusableField: Hashable {
+    case name
+    case email
+    case password
+    case confirmPassword
+}
+
 struct SignUpView: View {
     @EnvironmentObject var userInfo: UserInfo
     @State var user: UserViewModel = UserViewModel()
@@ -16,6 +23,7 @@ struct SignUpView: View {
     @State private var errorString = ""
     var primaryColor: UIColor
     var secondaryColor: UIColor
+    @FocusState private var focus: FocusableField?
     var body: some View {
         NavigationView {
             VStack {
@@ -33,6 +41,11 @@ struct SignUpView: View {
                     Image(systemName: "person")
                     VStack(alignment: .leading) {
                         TextInputView("Full Name", text: $user.fullname)
+                            .focused($focus, equals: .name)
+                            .submitLabel(.next)
+                            .onSubmit {
+                                self.focus = .email
+                            }
                         Rectangle().fill(Color(.secondaryLabel))
                             .frame(height: 1)
                     }
@@ -43,6 +56,11 @@ struct SignUpView: View {
                     Image(systemName: "at")
                     VStack(alignment: .leading) {
                         TextInputView("Email Address", text: $user.email)
+                            .focused($focus, equals: .email)
+                            .submitLabel(.next)
+                            .onSubmit {
+                                self.focus = .password
+                            }
                         if !user.validEmailAddressText.isEmpty || user.email.isEmpty {
                             Text(user.validEmailAddressText).font(.caption).foregroundColor(.red)
                         }
@@ -56,6 +74,11 @@ struct SignUpView: View {
                     Image(systemName: "lock")
                     VStack(alignment: .leading) {
                         TextInputView("Password", text: $user.password, isSecure: true)
+                            .focused($focus, equals: .password)
+                            .submitLabel(.next)
+                            .onSubmit {
+                                self.focus = .confirmPassword
+                            }
                         if !user.validPasswordText.isEmpty {
                             Text(user.validPasswordText).font(.caption).foregroundColor(.red)
                         }
@@ -69,6 +92,11 @@ struct SignUpView: View {
                     Image(systemName: "lock")
                     VStack(alignment: .leading) {
                         TextInputView("Confirm Password", text: $user.confirmPassword, isSecure: true)
+                            .focused($focus, equals: .confirmPassword)
+                            .submitLabel(.go)
+                            .onSubmit {
+                                signUpUser()
+                            }
                         if !user.passwordsMatch( user.confirmPassword) {
                             Text(user.validConfirmPasswordText).font(.caption).foregroundColor(.red)
                         }
