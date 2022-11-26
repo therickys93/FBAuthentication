@@ -8,6 +8,11 @@
 
 import SwiftUI
 
+private enum FocusableField: Hashable {
+    case email
+    case password
+}
+
 struct SignInWithEmailView: View {
     @EnvironmentObject var userInfo: UserInfo
     @State var user: UserViewModel = UserViewModel()
@@ -15,6 +20,7 @@ struct SignInWithEmailView: View {
     @Binding var action: LoginView.Action?
     @State private var showAlert = false
     @State private var authError: EmailAuthError?
+    @FocusState private var focus: FocusableField?
     var primaryColor: UIColor
     var secondaryColor: UIColor
     var body: some View {
@@ -35,6 +41,11 @@ struct SignInWithEmailView: View {
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled(true)
                     .keyboardType(.emailAddress)
+                    .focused($focus, equals: .email)
+                    .submitLabel(.next)
+                    .onSubmit {
+                        self.focus = .password
+                    }
             }
             .padding(.vertical, 6)
             .background(Divider(), alignment: .bottom)
@@ -43,6 +54,11 @@ struct SignInWithEmailView: View {
             HStack {
                 Image(systemName: "lock")
                 SecureField("Password", text: $user.password)
+                    .focused($focus, equals: .password)
+                    .submitLabel(.go)
+                    .onSubmit {
+                        signInUser()
+                    }
             }
             .padding(.vertical, 6)
             .background(Divider(), alignment: .bottom)
