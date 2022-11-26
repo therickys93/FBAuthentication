@@ -27,19 +27,22 @@ public struct ProfileView: View {
         ZStack {
             NavigationStack {
                 VStack {
-                    Text(userInfo.user.name)
-                        .font(.title)
                     if !canDelete {
                         VStack {
-                            HStack {
-                                Image(systemName: "at")
-                                TextInputView("Full Name", text: $fullname)
-                                    .focused($focus, equals: .name)
-                                    .submitLabel(.go)
-                                    .onSubmit {
-                                        updateUserName()
-                                    }
+                            VStack {
+                                HStack {
+                                    Image(systemName: "at")
+                                    TextInputView("Full Name", text: $fullname)
+                                        .focused($focus, equals: .name)
+                                        .submitLabel(.go)
+                                        .onSubmit {
+                                            updateUserName()
+                                        }
+                                }
+                                Rectangle().fill(Color(.secondaryLabel))
+                                    .frame(height: 1)
                             }
+                            .padding(.vertical, 6)
                             
                             Button {
                                 updateUserName()
