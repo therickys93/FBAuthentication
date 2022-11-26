@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AuthenticationServices
 
 private enum FocusableField: Hashable {
     case email
@@ -17,6 +18,7 @@ struct SignInWithEmailView: View {
     @EnvironmentObject var userInfo: UserInfo
     @State var user: UserViewModel = UserViewModel()
     @Binding var showSheet: Bool
+    @Environment(\.colorScheme) var colorScheme
     @Binding var action: LoginView.Action?
     @State private var showAlert = false
     @State private var authError: EmailAuthError?
@@ -63,7 +65,19 @@ struct SignInWithEmailView: View {
             .padding(.vertical, 6)
             .background(Divider(), alignment: .bottom)
             .padding(.bottom, 4)
-                        
+            
+            HStack {
+                Spacer()
+                Button {
+                    action = .resetPW
+                    showSheet = true
+                } label: {
+                    Text("Forgot Password?")
+                }
+                .foregroundColor(Color(secondaryColor))
+            }
+            .padding(.vertical, 10)
+            
             Button {
                 signInUser()
             } label: {
@@ -79,18 +93,15 @@ struct SignInWithEmailView: View {
             .buttonStyle(.borderedProminent)
             .opacity(user.isLogInComplete ? 1 : 0.75)
             
-            HStack {
-                Spacer()
-                Button {
-                    action = .resetPW
-                    showSheet = true
-                } label: {
-                    Text("Forgot Password")
-                }
-                .foregroundColor(Color(secondaryColor))
-            }
-            .padding(.vertical, 10)
-            
+//            SignInWithAppleButton(.signIn) { request in
+//                print(request)
+//            } onCompletion: { result in
+//                print(result)
+//            }
+//            .signInWithAppleButtonStyle(colorScheme == .light ? .black : .white)
+//            .cornerRadius(8)
+//            .frame(maxWidth: .infinity, minHeight: 50)
+                        
             HStack {
                 Text("Don't have an account yet?")
                 Button {

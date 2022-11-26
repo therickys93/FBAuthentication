@@ -146,8 +146,8 @@ extension SignUpView {
     func signUpUser() {
         FBAuth.createUser(withEmail: self.user.email,
                           name: self.user.fullname,
-                          password: self.user.password) { (restult) in
-            switch restult {
+                          password: self.user.password) { (result) in
+            switch result {
             case .failure(let error):
                 self.errorString = error.localizedDescription
                 self.showError = true
@@ -174,7 +174,6 @@ struct TextInputView: View {
     @Binding var text: String
     var isSecure = false
     var body: some View {
-        //        VStack {
         ZStack(alignment: .leading) {
             Text(title)
                 .foregroundColor(text.tfProperties.phColor)
@@ -193,7 +192,6 @@ struct TextInputView: View {
         }
         .padding(.bottom, text.isEmpty ? 0 : 15)
         .animation(.default, value: text)
-        //        }
     }
 }
 

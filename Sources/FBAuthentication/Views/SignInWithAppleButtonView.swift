@@ -71,8 +71,9 @@ struct SignInWithAppleButtonView: View {
                                 }
                               }
         )
-        .frame(width: 200, height: 50)
-        .signInWithAppleButtonStyle(.whiteOutline)
+        .padding()
+        .frame(maxWidth: 200, maxHeight: 50)
+        .signInWithAppleButtonStyle(.black)
     }
 }
 

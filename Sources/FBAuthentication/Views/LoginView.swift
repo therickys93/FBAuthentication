@@ -22,7 +22,6 @@ struct LoginView: View {
                                 action: $action,
                                 primaryColor: primaryColor,
                                 secondaryColor: secondaryColor)
-//            SignInWithAppleButtonView()
         }
         .sheet(isPresented: $showSheet) { [action] in
             if action == .signUp {
