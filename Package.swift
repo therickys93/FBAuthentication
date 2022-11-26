@@ -25,12 +25,12 @@ let package = Package(
         .target(
             name: "FBAuthentication",
             dependencies: [
-                .product(name: "FirebaseAuth", package: "Firebase"),
-                .product(name: "FirebaseFirestore", package: "Firebase"),
-                .product(name: "FirebaseFirestoreSwift", package: "Firebase"),
-                .product(name: "FirebaseStorage", package: "Firebase"),
-                .product(name: "FirebaseAnalytics", package: "Firebase"),
-                .product(name: "FirebaseAnalyticsSwift", package: "Firebase")
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseFirestoreSwift", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseStorage", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseAnalytics", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseAnalyticsSwift", package: "firebase-ios-sdk")
             ],
             resources: [.process("Image.xcassets")]),
         .testTarget(
