@@ -22,15 +22,15 @@ struct LoginView: View {
                                 action: $action,
                                 primaryColor: primaryColor,
                                 secondaryColor: secondaryColor)
-            SignInWithAppleButtonView()
+            // SignInWithAppleButtonView()
         }
-            .sheet(isPresented: $showSheet) { [action] in
-                if action == .signUp {
-                    SignUpView(primaryColor: primaryColor,
-                               secondaryColor: secondaryColor)
-                } else {
-                    ForgotPasswordView(primaryColor: primaryColor)
-                }
+        .sheet(isPresented: $showSheet) { [action] in
+            if action == .signUp {
+                SignUpView(primaryColor: primaryColor,
+                            secondaryColor: secondaryColor)
+            } else {
+                ForgotPasswordView(primaryColor: primaryColor)
+            }
         }
     }
 }

@@ -112,12 +112,14 @@ struct TextInputView: View {
                 .offset(y: text.tfProperties.offset)
                 .scaleEffect(text.tfProperties.scale, anchor: .leading)
             if isSecure {
-                SecureField("", text: $text).autocapitalization(.none)
+                SecureField("", text: $text)
             } else {
-                TextField("", text: $text).autocapitalization(.none)
+                TextField("", text: $text)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled(true)
             }
         }
-            .padding(.bottom, text.isEmpty ? 0 : 15)
+        .padding(.bottom, text.isEmpty ? 0 : 15)
         .animation(.default, value: text)
         //        }
     }

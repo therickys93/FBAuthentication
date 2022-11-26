@@ -19,9 +19,9 @@ struct SignInWithEmailView: View {
     var secondaryColor: UIColor
     var body: some View {
         VStack {
-            TextField("Email Address",
-                      text: self.$user.email)
-                .autocapitalization(.none)
+            TextField("Email Address", text: self.$user.email)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled(true)
                 .keyboardType(.emailAddress)
             SecureField("Password", text: $user.password)
             HStack {
