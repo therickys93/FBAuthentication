@@ -19,11 +19,28 @@ struct SignUpView: View {
     var body: some View {
         NavigationView {
             VStack {
+                Image("SignUp", bundle: .module)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(minWidth: 300, maxHeight: 400)
+                
+                Text("Sign Up")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                HStack {
+                    Image(systemName: "person")
                     VStack(alignment: .leading) {
                         TextInputView("Full Name", text: $user.fullname)
                         Rectangle().fill(Color(.secondaryLabel))
                             .frame(height: 1)
                     }
+                }
+                .padding(.vertical, 6)
+                
+                HStack {
+                    Image(systemName: "at")
                     VStack(alignment: .leading) {
                         TextInputView("Email Address", text: $user.email)
                         if !user.validEmailAddressText.isEmpty || user.email.isEmpty {
@@ -32,6 +49,11 @@ struct SignUpView: View {
                         Rectangle().fill(Color(.secondaryLabel))
                             .frame(height: 1)
                     }
+                }
+                .padding(.vertical, 6)
+                
+                HStack {
+                    Image(systemName: "lock")
                     VStack(alignment: .leading) {
                         TextInputView("Password", text: $user.password, isSecure: true)
                         if !user.validPasswordText.isEmpty {
@@ -40,6 +62,11 @@ struct SignUpView: View {
                         Rectangle().fill(Color(.secondaryLabel))
                             .frame(height: 1)
                     }
+                }
+                .padding(.vertical, 6)
+                
+                HStack {
+                    Image(systemName: "lock")
                     VStack(alignment: .leading) {
                         TextInputView("Confirm Password", text: $user.confirmPassword, isSecure: true)
                         if !user.passwordsMatch( user.confirmPassword) {
@@ -48,50 +75,63 @@ struct SignUpView: View {
                         Rectangle().fill(Color(.secondaryLabel))
                             .frame(height: 1)
                     }
-                VStack(spacing: 20 ) {
-                    Button {
-                        FBAuth.createUser(withEmail: self.user.email,
-                                          name: self.user.fullname,
-                                          password: self.user.password) { (restult) in
-                            switch restult {
-                            case .failure(let error):
-                                self.errorString = error.localizedDescription
-                                self.showError = true
-                            case .success:
-                                print("Account creation successful")
-                            }
-                        }
-                    } label: {
-                        Text("Register")
-                            .frame(width: 200)
-                            .padding(.vertical, 15)
-                            .background(Color(primaryColor))
-                            .cornerRadius(8)
-                            .foregroundColor(.white)
-                            .opacity(user.isSignInComplete ? 1 : 0.75)
-                    }
-                    .disabled(!user.isSignInComplete)
-                    Spacer()
-                }.padding()
-            }
-            .frame(width: 300)
-            .padding(.top)
-                .alert(isPresented: $showError) {
-                    Alert(title: Text("Error creating accout"),
-                          message: Text(self.errorString),
-                          dismissButton: .default(Text("OK")))
                 }
-                .navigationBarTitle("Sign Up", displayMode: .inline)
-                .navigationBarItems(trailing: Button("Dismiss") {
-                    self.presentationMode.wrappedValue.dismiss()
-                })
+                .padding(.vertical, 6)
+                
+                Button {
+                    signUpUser()
+                } label: {
+                    Text("Sign Up")
+                        .padding(.vertical, 8)
+                        .frame(maxWidth: .infinity)
+                }
+                .disabled(!user.isSignInComplete)
+                .frame(maxWidth: .infinity)
+                .buttonStyle(.borderedProminent)
+                .background(Color(primaryColor))
+                .opacity(user.isSignInComplete ? 1 : 0.75)
+                
+            }
+            .alert(isPresented: $showError) {
+                Alert(title: Text("Error creating accout"),
+                      message: Text(self.errorString),
+                      dismissButton: .default(Text("OK")))
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        self.presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle")
+                            .foregroundColor(Color(secondaryColor))
+                    }
+                }
+            }
+            .listStyle(.plain)
+            .padding()
+        }
+    }
+}
+
+extension SignUpView {
+    func signUpUser() {
+        FBAuth.createUser(withEmail: self.user.email,
+                          name: self.user.fullname,
+                          password: self.user.password) { (restult) in
+            switch restult {
+            case .failure(let error):
+                self.errorString = error.localizedDescription
+                self.showError = true
+            case .success:
+                print("Account creation successful")
+            }
         }
     }
 }
 
 struct SignUpView_Previews: PreviewProvider {
     static var previews: some View {
-        SignUpView(primaryColor: UIColor.systemOrange, secondaryColor: .blue)
+        SignUpView(primaryColor: UIColor.systemBlue, secondaryColor: .systemOrange)
     }
 }
 

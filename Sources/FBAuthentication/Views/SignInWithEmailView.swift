@@ -71,13 +71,13 @@ struct SignInWithEmailView: View {
                     .padding(.vertical, 8)
                     .frame(maxWidth: .infinity)
                     .foregroundColor(.white)
-                    .opacity(user.isLogInComplete ? 1 : 0.75)
             }
             .disabled(!user.isLogInComplete)
             .background(Color(primaryColor))
             .frame(maxWidth: .infinity)
             .cornerRadius(8)
             .buttonStyle(.borderedProminent)
+            .opacity(user.isLogInComplete ? 1 : 0.75)
             
             HStack {
                 Spacer()
