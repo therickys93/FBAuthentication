@@ -20,8 +20,8 @@ public struct LoadingView<StartView>: View where StartView: View {
     ///   - secondaryColor: color used for the secondary button defaults to systemBlue
     ///   - logoImage: An image to be used on the login screen.  If left as nil, will display a Firebase logo
     public init(startView: StartView,
-                primaryColor: UIColor = .systemOrange,
-                secondaryColor: UIColor = .systemBlue) {
+                primaryColor: UIColor = .systemBlue,
+                secondaryColor: UIColor = .systemOrange) {
         self.startView = startView
         self.primaryColor = primaryColor
         self.secondaryColor = secondaryColor
