@@ -22,6 +22,7 @@ public struct FBAuth {
     ///   - email: the email address used if signed in with apple
     ///   - resetCompletion: the result returned either a success or an error
     static func resetPassword(email: String, resetCompletion: @escaping (Result<Bool, Error>) -> Void) {
+        Auth.auth().useAppLanguage()
         Auth.auth().sendPasswordReset(withEmail: email, completion: { (error) in
             if let error = error {
                 resetCompletion(.failure(error))
