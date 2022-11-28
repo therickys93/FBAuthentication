@@ -261,7 +261,7 @@ public struct FBAuth {
     /// Function called to change user password
     /// - Parameters:
     ///     - password: new password
-    ///     - completion: competion handler dealing with response
+    ///     - completion: completion handler dealing with response
     static func changeUser(password: String, completion: @escaping (Result<Bool, Error>) -> Void) {
         if let user = Auth.auth().currentUser {
             user.updatePassword(to: password) { error in
@@ -273,6 +273,10 @@ public struct FBAuth {
             }
         }
     }
+    /// Function called to change user email
+    /// - Parameters:
+    ///     - email: new email
+    ///     - completion: completion handler dealing with response.
     static func changeUser(email: String, completion: @escaping (Result<Bool, Error>) -> Void) {
         if let user = Auth.auth().currentUser {
             user.updateEmail(to: email) { error in

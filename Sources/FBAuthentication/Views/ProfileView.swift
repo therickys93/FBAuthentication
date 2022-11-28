@@ -62,43 +62,44 @@ public struct ProfileView: View {
                             .opacity(!fullname.isEmpty ? 1 : 0.75)
                         }
                         .padding()
-                    }
-                    Spacer()
-                    VStack {
-                        VStack {
-                            HStack {
-                                Image(systemName: "lock")
-                                TextInputView("New Password", text: $password, isSecure: true)
-                            }
-                            Rectangle().fill(Color(.secondaryLabel))
-                                .frame(height: 1)
-                        }
-                        .padding(.vertical, 6)
                         
+                        Spacer()
                         VStack {
-                            HStack {
-                                Image(systemName: "lock")
-                                TextInputView("Confirm New Password", text: $confirmPassword, isSecure: true)
+                            VStack {
+                                HStack {
+                                    Image(systemName: "lock")
+                                    TextInputView("New Password", text: $password, isSecure: true)
+                                }
+                                Rectangle().fill(Color(.secondaryLabel))
+                                    .frame(height: 1)
                             }
-                            Rectangle().fill(Color(.secondaryLabel))
-                                .frame(height: 1)
+                            .padding(.vertical, 6)
+                            
+                            VStack {
+                                HStack {
+                                    Image(systemName: "lock")
+                                    TextInputView("Confirm New Password", text: $confirmPassword, isSecure: true)
+                                }
+                                Rectangle().fill(Color(.secondaryLabel))
+                                    .frame(height: 1)
+                            }
+                            .padding(.vertical, 6)
+                            
+                            Button {
+                                // update password
+                            } label: {
+                                Text("Update")
+                                    .padding(.vertical, 8)
+                                    .cornerRadius(8)
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .cornerRadius(8)
+                            .buttonStyle(.borderedProminent)
+                            .background(Color(primaryColor))
                         }
-                        .padding(.vertical, 6)
-                        
-                        Button {
-                            // update password
-                        } label: {
-                            Text("Update")
-                                .padding(.vertical, 8)
-                                .cornerRadius(8)
-                                .frame(maxWidth: .infinity)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .cornerRadius(8)
-                        .buttonStyle(.borderedProminent)
-                        .background(Color(primaryColor))
+                        .padding()
                     }
-                    .padding()
                     Spacer()
                     Text(canDelete ?
                         "DO YOU REALLY WANT TO DELETE?" :
