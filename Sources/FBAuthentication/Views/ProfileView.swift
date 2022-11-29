@@ -118,7 +118,7 @@ public struct ProfileView: View {
                             .cornerRadius(8)
                             .buttonStyle(.borderedProminent)
                             .background(Color(primaryColor))
-                            .disabled(user.passwordsMatch(user.confirmPassword))
+                            .disabled(!user.passwordsMatch(user.confirmPassword))
                         }
                         .padding()
                     }
