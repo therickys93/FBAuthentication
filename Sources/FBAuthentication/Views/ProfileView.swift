@@ -118,7 +118,7 @@ public struct ProfileView: View {
                             .cornerRadius(8)
                             .buttonStyle(.borderedProminent)
                             .background(Color(primaryColor))
-                            .disabled(!user.passwordsMatch(user.confirmPassword))
+                            .disabled(!user.passwordsMatch(user.confirmPassword) || user.password.isEmpty)
                         }
                         .padding()
                     }
@@ -200,6 +200,7 @@ extension ProfileView {
             switch result {
             case .success(_):
                 print("password changed")
+                presentationMode.wrappedValue.dismiss()
             case .failure(let error):
                 print(error.localizedDescription)
             }
