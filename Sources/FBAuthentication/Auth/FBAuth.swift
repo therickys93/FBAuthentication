@@ -263,7 +263,7 @@ public struct FBAuth {
     /// - Parameters:
     ///     - password: new password
     ///     - completion: completion handler dealing with response
-    static func changeUser(password: String, completion: @escaping (Result<Bool, Error>) -> Void) {
+    static func changeUserPassword(_ password: String, completion: @escaping (Result<Bool, Error>) -> Void) {
         if let user = Auth.auth().currentUser {
             user.updatePassword(to: password) { error in
                 if let error = error {

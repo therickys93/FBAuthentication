@@ -9,19 +9,24 @@
 import SwiftUI
 import FirebaseAuth
 
-private enum FocusableField: Hashable {
+private enum FullNameFocusableField: Hashable {
     case name
+}
+
+private enum PasswordFocusableField: Hashable {
+    case password
+    case confirmPassword
 }
 
 public struct ProfileView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var userInfo: UserInfo
+    @State var user: UserViewModel = UserViewModel()
     @State private var providers: [FBAuth.ProviderType] = []
     @State private var canDelete = false
     @State private var fullname = ""
-    @State private var password = ""
-    @State private var confirmPassword = ""
-    @FocusState private var focus: FocusableField?
+    @FocusState private var fullNameFocus: FullNameFocusableField?
+    @FocusState private var passwordFocus: PasswordFocusableField?
     var primaryColor: UIColor
     public init(primaryColor: UIColor = .systemBlue) {
         self.primaryColor = primaryColor
@@ -36,7 +41,7 @@ public struct ProfileView: View {
                                 HStack {
                                     Image(systemName: "person")
                                     TextInputView("Full Name", text: $fullname)
-                                        .focused($focus, equals: .name)
+                                        .focused($fullNameFocus, equals: .name)
                                         .submitLabel(.go)
                                         .onSubmit {
                                             updateUserName()
@@ -66,9 +71,19 @@ public struct ProfileView: View {
                         Spacer()
                         VStack {
                             VStack {
-                                HStack {
-                                    Image(systemName: "lock")
-                                    TextInputView("New Password", text: $password, isSecure: true)
+                                VStack {
+                                    HStack {
+                                        Image(systemName: "lock")
+                                        TextInputView("New Password", text: $user.password, isSecure: true)
+                                            .focused($passwordFocus, equals: .password)
+                                            .submitLabel(.next)
+                                            .onSubmit {
+                                                self.passwordFocus = .confirmPassword
+                                            }
+                                    }
+                                    if !user.validPasswordText.isEmpty {
+                                        Text(user.validPasswordText).font(.caption).foregroundColor(.red)
+                                    }
                                 }
                                 Rectangle().fill(Color(.secondaryLabel))
                                     .frame(height: 1)
@@ -76,9 +91,15 @@ public struct ProfileView: View {
                             .padding(.vertical, 6)
                             
                             VStack {
-                                HStack {
-                                    Image(systemName: "lock")
-                                    TextInputView("Confirm New Password", text: $confirmPassword, isSecure: true)
+                                VStack {
+                                    HStack {
+                                        Image(systemName: "lock")
+                                        TextInputView("Confirm New Password", text: $user.confirmPassword, isSecure: true)
+                                            .focused($passwordFocus, equals: .confirmPassword)
+                                    }
+                                    if !user.passwordsMatch( user.confirmPassword) {
+                                        Text(user.validConfirmPasswordText).font(.caption).foregroundColor(.red)
+                                    }
                                 }
                                 Rectangle().fill(Color(.secondaryLabel))
                                     .frame(height: 1)
@@ -86,7 +107,7 @@ public struct ProfileView: View {
                             .padding(.vertical, 6)
                             
                             Button {
-                                // update password
+                                updatePassword()
                             } label: {
                                 Text("Update")
                                     .padding(.vertical, 8)
@@ -97,6 +118,7 @@ public struct ProfileView: View {
                             .cornerRadius(8)
                             .buttonStyle(.borderedProminent)
                             .background(Color(primaryColor))
+                            .disabled(user.passwordsMatch(user.confirmPassword))
                         }
                         .padding()
                     }
@@ -171,6 +193,17 @@ extension ProfileView {
                 print(error.localizedDescription)
             }
         }
+    }
+    
+    func updatePassword() {
+//        FBAuth.changeUserPassword(user.password) { result in
+//            switch result {
+//            case .success():
+//                print("updated")
+//            case .failure(let error):
+//                print(error.localizedDescription)
+//            }
+//        }
     }
     
     func deleteUserAndUserData() {
