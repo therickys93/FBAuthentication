@@ -196,14 +196,14 @@ extension ProfileView {
     }
     
     func updatePassword() {
-//        FBAuth.changeUserPassword(user.password) { result in
-//            switch result {
-//            case .success():
-//                print("updated")
-//            case .failure(let error):
-//                print(error.localizedDescription)
-//            }
-//        }
+        FBAuth.changeUserPassword(user.password) { result in
+            switch result {
+            case .success(_):
+                print("password changed")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
     
     func deleteUserAndUserData() {
