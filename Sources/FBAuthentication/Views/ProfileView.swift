@@ -64,6 +64,7 @@ public struct ProfileView: View {
                             .cornerRadius(8)
                             .buttonStyle(.borderedProminent)
                             .background(Color(primaryColor))
+                            .disabled(fullname.isEmpty)
                             .opacity(!fullname.isEmpty ? 1 : 0.75)
                         }
                         .padding()
